@@ -1,5 +1,6 @@
 package com.strategickaos.listmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.InputQueue
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ListSelectionRecyclerViewAdapter.ListSelectionRecyclerViewClickListener {
 
     val listDataManager: ListDataManager = ListDataManager(this)
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
       val lists = listDataManager.readLists()
         listsRecyclerView = findViewById(R.id.lists_recyclerView)
         listsRecyclerView.layoutManager = LinearLayoutManager(this)
-        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists)
+        listsRecyclerView.adapter = ListSelectionRecyclerViewAdapter(lists, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -73,9 +74,26 @@ class MainActivity : AppCompatActivity() {
             recyclerAdapter.addList(list)
 
             dialog.dismiss()
+            showListDetail(list)
         }
 
         // 4
         builder.create().show()
     }
+
+    private fun showListDetail(list: TaskList){
+        val listDetailIntent = Intent(this, ListDetailActivity::class.java)
+        listDetailIntent.putExtra(INTENT_LIST_KEY, list)
+        startActivity(listDetailIntent)
+    }
+
+    override fun listItemClicked(list: TaskList) {
+        showListDetail(list)
+    }
+
+    companion object{
+        const val  INTENT_LIST_KEY = "list"
+    }
+
+
 }

@@ -10,7 +10,7 @@ class ListDataManager(private val context: Context) {
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context).edit()
 
-        sharedPreferences.putStringSet(list.name, list.Tasks.toHashSet())
+        sharedPreferences.putStringSet(list.name, list.tasks.toHashSet())
 
         sharedPreferences.apply()
     }
